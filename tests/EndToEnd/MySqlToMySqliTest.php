@@ -17,6 +17,14 @@ class MySqlToMySqliTest extends EndToEndTestcase{
 
         $this->converter->convert(__DIR__ . '/data/simple_test/in/');
         $this->assertDirectoryEquals(__DIR__ .'/data/simple_test/expected',
-        __DIR__ . '/data/simple_test/out');
+            __DIR__ . '/data/simple_test/out');
+    }
+
+    public function testDoSimpleTestWithLink() {
+        $this->cleanDir(__DIR__ . '/data/simple_test_with_link/out');
+
+        $this->converter->convert(__DIR__ . '/data/simple_test_with_link/in/');
+        $this->assertDirectoryEquals(__DIR__ .'/data/simple_test_with_link/expected',
+            __DIR__ . '/data/simple_test_with_link/out');
     }
 }
