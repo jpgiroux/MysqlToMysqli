@@ -3,12 +3,12 @@
 namespace App;
 
 use App\Transformation\ConnectTransformation;
+use App\Transformation\ErrnoTransformation;
 use App\Transformation\ErrorTransformation;
 
 class MysqlToMysqli {
 
     const NEEDLES = [
-        'mysql_errno()',
         'mysql_get_client_info()',
         'mysql_get_host_info()',
         'mysql_get_proto_info()',
@@ -39,7 +39,6 @@ class MysqlToMysqli {
     ];
 
     const REPLACES = [
-        'mysqli_errno($link)',
         'mysqli_get_client_info($link)',
         'mysqli_get_host_info($link)',
         'mysqli_get_proto_info($link)',
@@ -78,6 +77,7 @@ class MysqlToMysqli {
         $this->transformations = [
             new ConnectTransformation(),
             new ErrorTransformation(),
+            new ErrnoTransformation(),
         ];
     }
 
