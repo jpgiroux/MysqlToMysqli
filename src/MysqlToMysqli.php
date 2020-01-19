@@ -2,10 +2,12 @@
 
 namespace App;
 
+use App\Transformation\ConnectTransformation;
+use App\Transformation\ErrorTransformation;
+
 class MysqlToMysqli {
 
-    const NEEDLES = ['mysql_connect',
-        'mysql_error()',
+    const NEEDLES = [
         'mysql_errno()',
         'mysql_get_client_info()',
         'mysql_get_host_info()',
@@ -36,8 +38,7 @@ class MysqlToMysqli {
         'MYSQL_NUM',
     ];
 
-    const REPLACES = ['$link = mysqli_connect',
-        'mysqli_error($link)',
+    const REPLACES = [
         'mysqli_errno($link)',
         'mysqli_get_client_info($link)',
         'mysqli_get_host_info($link)',
@@ -70,6 +71,16 @@ class MysqlToMysqli {
 
     private $files_content = [];
 
+    private $transformations;
+
+    public function __construct() {
+       
+        $this->transformations = [
+            new ConnectTransformation(),
+            new ErrorTransformation(),
+        ];
+    }
+
     public function convert(string $dir) : void {
         if(is_dir($dir)) {
             if($dh = opendir($dir)) {
@@ -83,6 +94,11 @@ class MysqlToMysqli {
                         $content .= fgets($fh);
                     }
                     fclose($fh);
+
+                    foreach($this->transformations as $transformation) {
+                        $content = $transformation->transform($content);
+                    }
+
                     $this->files_content[$file] = str_replace(self::NEEDLES, self::REPLACES, $content);
                 }
                 closedir($dh);
