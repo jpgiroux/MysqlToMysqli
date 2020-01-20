@@ -6,11 +6,11 @@ use App\Transformation\ClientInfoTransformation;
 use App\Transformation\ConnectTransformation;
 use App\Transformation\ErrnoTransformation;
 use App\Transformation\ErrorTransformation;
+use App\Transformation\HostInfoTransformation;
 
 class MysqlToMysqli {
 
     const NEEDLES = [
-        'mysql_get_host_info()',
         'mysql_get_proto_info()',
         'mysql_get_server_info()',
         'mysql_info()',
@@ -39,7 +39,6 @@ class MysqlToMysqli {
     ];
 
     const REPLACES = [
-        'mysqli_get_host_info($link)',
         'mysqli_get_proto_info($link)',
         'mysqli_get_server_info($link)',
         'mysqli_info($link)',
@@ -78,6 +77,7 @@ class MysqlToMysqli {
             new ErrorTransformation(),
             new ErrnoTransformation(),
             new ClientInfoTransformation(),
+            new HostInfoTransformation(),
         ];
     }
 
