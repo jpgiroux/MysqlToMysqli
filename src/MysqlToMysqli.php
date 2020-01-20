@@ -2,11 +2,8 @@
 
 namespace App;
 
-use App\Transformation\ClientInfoTransformation;
 use App\Transformation\ConnectTransformation;
-use App\Transformation\ErrnoTransformation;
-use App\Transformation\ErrorTransformation;
-use App\Transformation\HostInfoTransformation;
+use App\Transformation\SimpleLinkTransformation;
 
 class MysqlToMysqli {
 
@@ -74,10 +71,10 @@ class MysqlToMysqli {
        
         $this->transformations = [
             new ConnectTransformation(),
-            new ErrorTransformation(),
-            new ErrnoTransformation(),
-            new ClientInfoTransformation(),
-            new HostInfoTransformation(),
+            new SimpleLinkTransformation('mysql_error', 'mysqli_error'),
+            new SimpleLinkTransformation('mysql_errno', 'mysqli_errno'),
+            new SimpleLinkTransformation('mysql_get_client_info', 'mysqli_get_client_info'),
+            new SimpleLinkTransformation('mysql_get_host_info', 'mysqli_get_host_info'),
         ];
     }
 
