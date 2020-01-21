@@ -3,15 +3,12 @@
 namespace App;
 
 use App\Transformation\ConnectTransformation;
+use App\Transformation\LinkParameterSwapTransformation;
 use App\Transformation\SimpleLinkTransformation;
 
 class MysqlToMysqli {
 
     const NEEDLES = [
-        'mysql_select_db(',
-        'mysql_set_charset(',
-        'mysql_query(',
-        'mysql_real_escape_string(',
         'mysql_num_rows(',
         'mysql_data_seek(',
         'mysql_fetch_array(',
@@ -21,17 +18,12 @@ class MysqlToMysqli {
         'mysql_fetch_row(',
         'mysql_field_seek(',
         'mysql_free_result(',
-        'mysql_close()',
         'MYSQL_BOTH',
         'MYSQL_ASSOC',
         'MYSQL_NUM',
     ];
 
     const REPLACES = [
-        'mysqli_select_db($link, ',
-        'mysqli_set_charset($link, ',
-        'mysqli_query($link, ',
-        'mysqli_real_escape_string($link, ',
         'mysqli_num_rows(',
         'mysqli_data_seek(',
         'mysqli_fetch_array(',
@@ -41,7 +33,6 @@ class MysqlToMysqli {
         'mysqli_fetch_row(',
         'mysqli_field_seek(',
         'mysqli_free_result(',
-        'mysqli_close($link)',
         'MYSQLI_BOTH',
         'MYSQLI_ASSOC',
         'MYSQLI_NUM',
@@ -68,6 +59,10 @@ class MysqlToMysqli {
             new SimpleLinkTransformation('mysql_affected_rows', 'mysqli_affected_rows'),
             new SimpleLinkTransformation('mysql_insert_id', 'mysqli_insert_id'),
             new SimpleLinkTransformation('mysql_close', 'mysqli_close'),
+            new LinkParameterSwapTransformation('mysql_select_db', 'mysqli_select_db'),
+            new LinkParameterSwapTransformation('mysql_set_charset', 'mysqli_set_charset'),
+            new LinkParameterSwapTransformation('mysql_query', 'mysqli_query'),
+            new LinkParameterSwapTransformation('mysql_real_escape_string', 'mysqli_real_escape_string'),
         ];
     }
 
