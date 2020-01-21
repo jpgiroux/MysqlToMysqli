@@ -8,17 +8,9 @@ use App\Transformation\SimpleLinkTransformation;
 class MysqlToMysqli {
 
     const NEEDLES = [
-        'mysql_get_proto_info()',
-        'mysql_get_server_info()',
-        'mysql_info()',
-        'mysql_ping()',
-        'mysql_stat()',
-        'mysql_thread_id()',
         'mysql_select_db(',
         'mysql_set_charset(',
         'mysql_query(',
-        'mysql_affected_rows()',
-        'mysql_insert_id()',
         'mysql_real_escape_string(',
         'mysql_num_rows(',
         'mysql_data_seek(',
@@ -36,17 +28,9 @@ class MysqlToMysqli {
     ];
 
     const REPLACES = [
-        'mysqli_get_proto_info($link)',
-        'mysqli_get_server_info($link)',
-        'mysqli_info($link)',
-        'mysqli_ping($link)',
-        'mysqli_stat($link)',
-        'mysqli_thread_id($link)',
         'mysqli_select_db($link, ',
         'mysqli_set_charset($link, ',
         'mysqli_query($link, ',
-        'mysqli_affected_rows($link)',
-        'mysqli_insert_id($link)',
         'mysqli_real_escape_string($link, ',
         'mysqli_num_rows(',
         'mysqli_data_seek(',
@@ -75,6 +59,15 @@ class MysqlToMysqli {
             new SimpleLinkTransformation('mysql_errno', 'mysqli_errno'),
             new SimpleLinkTransformation('mysql_get_client_info', 'mysqli_get_client_info'),
             new SimpleLinkTransformation('mysql_get_host_info', 'mysqli_get_host_info'),
+            new SimpleLinkTransformation('mysql_get_proto_info', 'mysqli_get_proto_info'),
+            new SimpleLinkTransformation('mysql_get_server_info', 'mysqli_get_server_info'),
+            new SimpleLinkTransformation('mysql_info', 'mysqli_info'),
+            new SimpleLinkTransformation('mysql_ping', 'mysqli_ping'),
+            new SimpleLinkTransformation('mysql_stat', 'mysqli_stat'),
+            new SimpleLinkTransformation('mysql_thread_id', 'mysqli_thread_id'),
+            new SimpleLinkTransformation('mysql_affected_rows', 'mysqli_affected_rows'),
+            new SimpleLinkTransformation('mysql_insert_id', 'mysqli_insert_id'),
+            new SimpleLinkTransformation('mysql_close', 'mysqli_close'),
         ];
     }
 
