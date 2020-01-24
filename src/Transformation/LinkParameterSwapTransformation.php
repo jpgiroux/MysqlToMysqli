@@ -21,11 +21,11 @@ class LinkParameterSwapTransformation implements ITransformation {
 
     public function transform(string $in) : string {
         $in = preg_replace([
-                '/' . $this->functionName  .'\((\s*(".*"|\'.*\'|\$\w*|\s*|\.*|\\n*|\w*\(.*\))*\s*),\s*(\$\w*\s*)\)/',
-                '/' . $this->functionName . '\((\s*(".*"|\'.*\'|\$\w*|\s*|\.*|\\n*|\w*\(.*\))*\s*)\)/',
+                '/' . $this->functionName  .'\((\s*(".*"|\'.*\'|\$(this->)?\w*|\s*|\.*|\\n*|(\$this->)?\w*\([^\)]*\))*\s*),\s*(\$(this->)?\w*\s*)\)/',
+                '/' . $this->functionName . '\((\s*(".*"|\'.*\'|\$(this->)?\w*|\s*|\.*|\\n*|(\$this->)?\w*\([^\)]*\))*\s*)\)/',
             ],
             [
-                $this->functionReplacement . '($3, $1)',
+                $this->functionReplacement . '($5, $1)',
                 $this->functionReplacement . '($link, $1)'
             ],
             $in

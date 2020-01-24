@@ -30,4 +30,16 @@ class LinkParameterSwapTransformationTest extends TestCase {
     public function testGivenLinkAndComplicatedStringExpression_ThenMysqliWithLinkAndExpression() {
         $this->assertEquals(self::A_FUNCTION_MYSQLI . '($myOwnLink, "a," . \'data,\' . $base);', $this->transformation->transform(self::A_FUNCTION_MYSQL . '("a," . \'data,\' . $base, $myOwnLink);'));
     }
+
+    public function testGivenLinkAndFunctionCall_ThenMysqliWithLinkAndFunctionCall() {
+        $this->assertEquals(self::A_FUNCTION_MYSQLI . '($myOwnLink, functionCall());', $this->transformation->transform(self::A_FUNCTION_MYSQL . '(functionCall(), $myOwnLink);'));
+    }
+
+    public function testGivenLinkAndFunctionCallWithParameters_ThenMysqliWithLinkAndFunctionCallWithParameters() {
+        $this->assertEquals(self::A_FUNCTION_MYSQLI . '($myOwnLink, functionCall("stuff", $other));', $this->transformation->transform(self::A_FUNCTION_MYSQL . '(functionCall("stuff", $other), $myOwnLink);'));
+    }
+
+    public function testGivenClassLinkAndMethod_ThenMysqliWithClassLinkAndMethod() {
+        $this->assertEquals(self::A_FUNCTION_MYSQLI . '($this->myOwnLink, $this->functionCall("stuff", $other));', $this->transformation->transform(self::A_FUNCTION_MYSQL . '($this->functionCall("stuff", $other), $this->myOwnLink);'));
+    }
 }
