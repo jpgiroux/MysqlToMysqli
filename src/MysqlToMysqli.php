@@ -2,25 +2,13 @@
 
 namespace App;
 
+use App\Transformation\ConnectTransformation;
+use App\Transformation\LinkParameterSwapTransformation;
+use App\Transformation\SimpleLinkTransformation;
+
 class MysqlToMysqli {
 
-    const NEEDLES = ['mysql_connect',
-        'mysql_error()',
-        'mysql_errno()',
-        'mysql_get_client_info()',
-        'mysql_get_host_info()',
-        'mysql_get_proto_info()',
-        'mysql_get_server_info()',
-        'mysql_info()',
-        'mysql_ping()',
-        'mysql_stat()',
-        'mysql_thread_id()',
-        'mysql_select_db(',
-        'mysql_set_charset(',
-        'mysql_query(',
-        'mysql_affected_rows()',
-        'mysql_insert_id()',
-        'mysql_real_escape_string(',
+    const NEEDLES = [
         'mysql_num_rows(',
         'mysql_data_seek(',
         'mysql_fetch_array(',
@@ -30,29 +18,12 @@ class MysqlToMysqli {
         'mysql_fetch_row(',
         'mysql_field_seek(',
         'mysql_free_result(',
-        'mysql_close()',
         'MYSQL_BOTH',
         'MYSQL_ASSOC',
         'MYSQL_NUM',
     ];
 
-    const REPLACES = ['$link = mysqli_connect',
-        'mysqli_error($link)',
-        'mysqli_errno($link)',
-        'mysqli_get_client_info($link)',
-        'mysqli_get_host_info($link)',
-        'mysqli_get_proto_info($link)',
-        'mysqli_get_server_info($link)',
-        'mysqli_info($link)',
-        'mysqli_ping($link)',
-        'mysqli_stat($link)',
-        'mysqli_thread_id($link)',
-        'mysqli_select_db($link, ',
-        'mysqli_set_charset($link, ',
-        'mysqli_query($link, ',
-        'mysqli_affected_rows($link)',
-        'mysqli_insert_id($link)',
-        'mysqli_real_escape_string($link, ',
+    const REPLACES = [
         'mysqli_num_rows(',
         'mysqli_data_seek(',
         'mysqli_fetch_array(',
@@ -62,13 +33,38 @@ class MysqlToMysqli {
         'mysqli_fetch_row(',
         'mysqli_field_seek(',
         'mysqli_free_result(',
-        'mysqli_close($link)',
         'MYSQLI_BOTH',
         'MYSQLI_ASSOC',
         'MYSQLI_NUM',
     ];
 
     private $files_content = [];
+
+    private $transformations;
+
+    public function __construct() {
+       
+        $this->transformations = [
+            new ConnectTransformation(),
+            new SimpleLinkTransformation('mysql_error', 'mysqli_error'),
+            new SimpleLinkTransformation('mysql_errno', 'mysqli_errno'),
+            new SimpleLinkTransformation('mysql_get_client_info', 'mysqli_get_client_info'),
+            new SimpleLinkTransformation('mysql_get_host_info', 'mysqli_get_host_info'),
+            new SimpleLinkTransformation('mysql_get_proto_info', 'mysqli_get_proto_info'),
+            new SimpleLinkTransformation('mysql_get_server_info', 'mysqli_get_server_info'),
+            new SimpleLinkTransformation('mysql_info', 'mysqli_info'),
+            new SimpleLinkTransformation('mysql_ping', 'mysqli_ping'),
+            new SimpleLinkTransformation('mysql_stat', 'mysqli_stat'),
+            new SimpleLinkTransformation('mysql_thread_id', 'mysqli_thread_id'),
+            new SimpleLinkTransformation('mysql_affected_rows', 'mysqli_affected_rows'),
+            new SimpleLinkTransformation('mysql_insert_id', 'mysqli_insert_id'),
+            new SimpleLinkTransformation('mysql_close', 'mysqli_close'),
+            new LinkParameterSwapTransformation('mysql_select_db', 'mysqli_select_db'),
+            new LinkParameterSwapTransformation('mysql_set_charset', 'mysqli_set_charset'),
+            new LinkParameterSwapTransformation('mysql_query', 'mysqli_query'),
+            new LinkParameterSwapTransformation('mysql_real_escape_string', 'mysqli_real_escape_string'),
+        ];
+    }
 
     public function convert(string $dir) : void {
         if(is_dir($dir)) {
@@ -83,6 +79,11 @@ class MysqlToMysqli {
                         $content .= fgets($fh);
                     }
                     fclose($fh);
+
+                    foreach($this->transformations as $transformation) {
+                        $content = $transformation->transform($content);
+                    }
+
                     $this->files_content[$file] = str_replace(self::NEEDLES, self::REPLACES, $content);
                 }
                 closedir($dh);

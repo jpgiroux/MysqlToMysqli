@@ -12,7 +12,7 @@ A php tool to convert your Mysql code to Mysqli.
 
 ## Supported features
 
-For now, a single file is supported. No scope management. The variable $link might be overwritten. The link identifier from mysql is not supported.
+For now, a single file is officialy supported (tested). No class support yet. No function officially support (tested).
 
 
 ## Supported functions
