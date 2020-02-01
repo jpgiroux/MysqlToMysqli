@@ -21,12 +21,13 @@ class SimpleLinkTransformation implements ITransformation {
 
     public function transform(string $in) : string {
         $in = preg_replace([
-                '/' . $this->functionName  .'\((\s*\$\w*\s*)\)/',
                 '/' . $this->functionName . '\(\)/',
+                '/' . $this->functionName  .'\('.Expressions::ANY_STRING.'\)/',
+                
             ],
             [
+                $this->functionReplacement . '($link)',
                 $this->functionReplacement . '($1)',
-                $this->functionReplacement . '($link)'
             ],
             $in
         );
