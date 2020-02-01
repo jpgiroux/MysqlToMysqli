@@ -17,7 +17,7 @@ jobs:
       run: composer install --prefer-dist --no-progress --no-suggest
 
     - name: Run unit test suite
-      run: bin/phpunit --testsuite Unit
+      run: composer unit-test
     
     - name: Run end2end test suite
-      run: bin/phpunit --testsuite EndToEnd
+      run: composer end2end-test
