@@ -1,5 +1,7 @@
 # MysqToMysqli
 
+![PHP Composer](https://github.com/jpgiroux/MysqlToMysqli/workflows/PHP%20Composer/badge.svg)
+
 A php tool to convert your Mysql code to Mysqli.
 
 ## Installation
