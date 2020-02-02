@@ -14,7 +14,7 @@ A php tool to convert your Mysql code to Mysqli.
 
 ## Supported features
 
-For now, a single file is officialy supported (tested). No class support yet. No function officially support (tested).
+For now, single and multiple files are officialy supported (tested). No class support yet. No function officially support (tested).
 
 
 ## Supported functions
