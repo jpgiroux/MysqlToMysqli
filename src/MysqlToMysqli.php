@@ -61,8 +61,8 @@ class MysqlToMysqli {
             new SimpleLinkTransformation('mysql_close', 'mysqli_close'),
             new LinkParameterSwapTransformation('mysql_select_db', 'mysqli_select_db'),
             new LinkParameterSwapTransformation('mysql_set_charset', 'mysqli_set_charset'),
-            new LinkParameterSwapTransformation('mysql_query', 'mysqli_query'),
             new LinkParameterSwapTransformation('mysql_real_escape_string', 'mysqli_real_escape_string'),
+            new LinkParameterSwapTransformation('mysql_query', 'mysqli_query'),
         ];
     }
 

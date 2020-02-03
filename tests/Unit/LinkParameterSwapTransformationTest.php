@@ -42,4 +42,16 @@ class LinkParameterSwapTransformationTest extends TestCase {
     public function testGivenClassLinkAndMethod_ThenMysqliWithClassLinkAndMethod() {
         $this->assertEquals(self::A_FUNCTION_MYSQLI . '($this->myOwnLink, $this->functionCall("stuff", $other));', $this->transformation->transform(self::A_FUNCTION_MYSQL . '($this->functionCall("stuff", $other), $this->myOwnLink);'));
     }
+
+    public function testGivenSingletonLink_ThenMysqliWithSingletonLink() {
+        $this->assertEquals(self::A_FUNCTION_MYSQLI . '(Singleton::getLink(), "a database");', $this->transformation->transform(self::A_FUNCTION_MYSQL . '("a database", Singleton::getLink());'));
+    }
+
+    public function testGivenNamespaceSingletonLink_ThenMysqliWithNamespaceSingletonLink() {
+        $this->assertEquals(self::A_FUNCTION_MYSQLI . '(App\Singleton::getLink(), "a database");', $this->transformation->transform(self::A_FUNCTION_MYSQL . '("a database", App\Singleton::getLink());'));
+    }
+
+    public function testGivenGlobalNamespaceSingletonLink_ThenMysqliWithGlobalNamespaceSingletonLink() {
+        $this->assertEquals(self::A_FUNCTION_MYSQLI . '(\Singleton::getLink(), "a database");', $this->transformation->transform(self::A_FUNCTION_MYSQL . '("a database", \Singleton::getLink());'));
+    }
 }

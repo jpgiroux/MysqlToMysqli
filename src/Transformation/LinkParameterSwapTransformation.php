@@ -21,12 +21,12 @@ class LinkParameterSwapTransformation implements ITransformation {
 
     public function transform(string $in) : string {
         $in = preg_replace([
-                '/' . $this->functionName  .'\('.Expressions::ANY_STRING.',\s*('.Expressions::VARIABLE.'\s*)\)/',
+                '/' . $this->functionName  .'\('.Expressions::ANY_STRING.',\s*('.Expressions::VARIABLE.'|'.Expressions::FUNC.'\s*)\)/',
                 '/' . $this->functionName . '\('.Expressions::ANY_STRING.'\)/',
             ],
             [
-                $this->functionReplacement . '($5, $1)',
-                $this->functionReplacement . '($link, $1)'
+                $this->functionReplacement . '($6, $1)',
+                $this->functionReplacement . '($link, $1)',
             ],
             $in
         );

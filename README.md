@@ -49,3 +49,13 @@ For now, single and multiple files are officialy supported (tested). No class su
 * MYSQL_BOTH
 * MYSQL_ASSOC
 * MYSQL_NUM
+
+## Known issues
+
+The use of function as a parameter for the `mysql_real_escape_string` (or any other function) inside the `mysql_query` function (or any other function) is currently bugy.
+
+```php
+ $result2 = mysql_query('select * from a_table WHERE something = '
+    . mysql_real_escape_string('a"string"', BdConnection::getConnection()) . ' ORDER by id',  BdConnection::getConnection());
+
+```
